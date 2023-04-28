@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<meta name="viewport" content="width=device-width" />
+		<style>
+			@font-face {
+				font-family: OnePlusSlate;
+				src: url(%sveltekit.assets%/SlateForOnePlus-Regular.ttf);
+			}
+			@font-face {
+				font-family: Roboto;
+				src: url(%sveltekit.assets%/Roboto-Regular.ttf);
+			}
+			@font-face {
+				font-family: Lora;
+				src: url(%sveltekit.assets%/Lora-VariableFont_wght.ttf);
+			}
+			@font-face {
+				font-family: 'Noto Serif';
+				src: url(%sveltekit.assets%/NotoSerif-Regular.ttf);
+			}
+			body {
+				font-family: 'Lora';
+			}
+		</style>
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>
