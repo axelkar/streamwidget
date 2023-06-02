@@ -43,7 +43,12 @@
 				'Authorization': localStorage.token
 			}
 		});
+		sse.onopen = (event) => {
+			console.info("SSE Connected", event);
+			sseError = null;
+		};
 		sse.onerror = (event) => {
+			console.warn("SSE connection error:", event);
 			sseError = event.toString();
 		};
 		sse.onmessage = (event) => {
