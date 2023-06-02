@@ -30,6 +30,9 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"event-source-polyfill": "^1.0.31"
+		"event-source-polyfill": "^1.0.31",
+		"jsonwebtoken": "^9.0.0",
+		"thirty-two": "^1.0.2",
+		"totp-generator": "^0.0.14"
 	}
 }

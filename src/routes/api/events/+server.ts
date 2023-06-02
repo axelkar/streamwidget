@@ -1,4 +1,6 @@
-import serverState from '$lib/serverState';
+import { GlobalThisState } from '$lib/serverState';
+import { checkJwtReq } from '$lib/totpUtils';
+import { error } from '@sveltejs/kit';
 
 const eventClients: Set<{ connection: ReadableStreamDefaultController }> = new Set();
 export function _broadcastEvent(event: { kind: string; data: unknown }) {
@@ -25,7 +27,9 @@ export function _sendEvent(
 ) {
 	connection.enqueue('data: ' + JSON.stringify(event) + '\n\n');
 }
-export function GET() {
+export function GET({ request }) {
+	if (!checkJwtReq(request)) throw error(401, 'Unauthorized');
+
 	let connection: ReadableStreamDefaultController | null = null;
 	console.log("New connection");
 	return new Response(
@@ -33,7 +37,7 @@ export function GET() {
 			start: (_) => {
 				connection = _;
 				eventClients.add({ connection });
-				const { currentSong, songs } = serverState;
+				const { currentSong, songs } = globalThis[GlobalThisState];
 				_sendEvent(connection, {
 					kind: 'initialize',
 					data: {

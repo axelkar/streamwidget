@@ -1,9 +1,12 @@
-import { json } from '@sveltejs/kit';
-import serverState from '$lib/serverState';
+import { json, error } from '@sveltejs/kit';
+import { GlobalThisState } from '$lib/serverState';
+import { checkJwtReq } from '$lib/totpUtils';
 import { _broadcastEvent } from './events/+server';
 
-export function GET() {
-	const { currentSong, songs } = serverState;
+export function GET({ request }) {
+	if (!checkJwtReq(request)) throw error(401, 'Unauthorized');
+
+	const { currentSong, songs } = globalThis[GlobalThisState];
 	return json({
 		currentSong,
 		songs
@@ -11,11 +14,14 @@ export function GET() {
 }
 
 export async function POST({ request }) {
+	if (!checkJwtReq(request)) throw error(401, 'Unauthorized');
+
 	const { currentSong } = await request.json();
-	serverState.currentSong = currentSong;
+	globalThis[GlobalThisState].currentSong = currentSong;
 	_broadcastEvent({
 		kind: 'updateCurrentSong',
 		data: { currentSong }
 	});
 	return new Response('', { status: 200 });
 }
+

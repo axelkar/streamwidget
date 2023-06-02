@@ -1,9 +1,7 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import { fly, fade } from 'svelte/transition';
-	import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
-
-	const EventSource = NativeEventSource || EventSourcePolyfill;
+	import { EventSourcePolyfill } from 'event-source-polyfill';
 
 	export let data: {
 		songs: string[];
@@ -26,7 +24,8 @@
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				'Authorization': localStorage.token
 			},
 			body: JSON.stringify({
 				currentSong
@@ -39,7 +38,11 @@
 	let sse: EventSource | null = null;
 	let sseError: string | null = null;
 	onMount(() => {
-		sse = new EventSource('/api/events');
+		sse = new EventSourcePolyfill('/api/events', {
+			headers: {
+				'Authorization': localStorage.token
+			}
+		});
 		sse.onerror = (event) => {
 			sseError = event.toString();
 		};
