@@ -14,14 +14,12 @@ export function generateJwt(totp: string): string | null {
 }
 export function checkJwtReq(request): boolean {
 	const token = request.headers.get("Authorization");
-	console.log({ token })
 	return typeof token === 'string' && checkJwt(token);
 }
 export function checkJwt(token: string): Record<string, unknown> | null {
 	try {
 		return jwt.verify(token, globalThis[GlobalThisState].jwtSecret);
 	} catch(err) {
-		console.log("jwt err");
 		return null
 	}
 }
